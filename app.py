@@ -25,6 +25,8 @@ from urllib.error import HTTPError
 import json
 import os
 
+import base64
+
 from flask import Flask
 from flask import request
 from flask import make_response
@@ -38,6 +40,8 @@ def webhook():
 
     print("Headers:")
     print(request.headers)
+    authType, credentialsBase64 = request.headers['Authorization'].Split(" ")
+    print("Credentials: " + base64.b64decode(credentialsBase64))
     print("Request:")
     print(json.dumps(req, indent=4))
 
