@@ -38,16 +38,19 @@ app = Flask(__name__)
 def webhook():
     req = request.get_json(silent=True, force=True)
 
+    if req.get("result").get("action") != "light.action":
+    return {}
+
     print("Headers:")
     print(request.headers)
-
-    if not authorizeOrigin(request.headers['Authorization']):
-        res = makeWebhookResult(request, createErrorSpeech("AUTH_FAILURE"))
-    else:
-        res = makeWebhookResult(request, createSpeech(request))
-   
     print("Request:")
     print(json.dumps(req, indent=4))
+
+    res = ""
+    if not authorizeOrigin(request.headers['Authorization']):
+        res = makeWebhookResult(createErrorSpeech("AUTH_FAILURE"))
+    else:
+        res = makeWebhookResult(createSpeech(req))
 
     res = json.dumps(res, indent=4)
     # print(res)
@@ -59,7 +62,7 @@ def buildResponseSpeech(iotType, room, stateChange):
     return "I have successfully set the " + iotType + " to " + stateChange + " in the " + room + "."
 
 def createErrorSpeech(reason):
-    if (reason is "AUTH_FAILURE"):
+    if (reason == "AUTH_FAILURE"):
         return "You are not authorized to command the Broodmother."
 
 def createSpeech(data):
@@ -74,10 +77,7 @@ def createSpeech(data):
 
     return speech
 
-def makeWebhookResult(data, speech):
-    if data.get("result").get("action") != "light.action":
-        return {}
-
+def makeWebhookResult(speech):
     return {
         "speech": speech,
         "displayText": speech,
