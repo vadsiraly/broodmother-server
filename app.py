@@ -75,7 +75,7 @@ def createSpeech(data):
     return speech
 
 def makeWebhookResult(data, speech):
-    if req.get("result").get("action") != "light.action":
+    if data.get("result").get("action") != "light.action":
         return {}
 
     return {
