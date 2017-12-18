@@ -37,6 +37,8 @@ app = Flask(__name__)
 def webhook():
     req = request.get_json(silent=True, force=True)
 
+    print("Headers:")
+    print(json.dump(request.headers))
     print("Request:")
     print(json.dumps(req, indent=4))
 
@@ -61,16 +63,6 @@ def processRequest(req):
     #data = json.loads(result)
     res = makeWebhookResult(req)
     return res
-
-
-def makeYqlQuery(req):
-    result = req.get("result")
-    parameters = result.get("parameters")
-    city = parameters.get("geo-city")
-    if city is None:
-        return None
-
-    return "select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='" + city + "')"
 
 def buildResponseSpeech(iotType, room, stateChange):
     return "I have successfully set the " + iotType + " to " + stateChange + " in the " + room + "."
