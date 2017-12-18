@@ -94,7 +94,7 @@ def authorizeOrigin(header):
     print("Username: " + username)
     print("Password: " + password)
 
-    if (username is "jarvis") and (password is "jarvis"):
+    if (username == "jarvis") and (password == "jarvis"):
         print("Credentials are correct!")
         return True
     else:
