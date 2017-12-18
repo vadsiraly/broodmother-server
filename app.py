@@ -42,9 +42,9 @@ def webhook():
     print(request.headers)
 
     if not authorizeOrigin(request.headers['Authorization']):
-        res = makeWebhookResult(request, createErrorSpeech)
+        res = makeWebhookResult(request, createErrorSpeech("AUTH_FAILURE"))
     else:
-        res = makeWebhookResult(request, createSpeech)
+        res = makeWebhookResult(request, createSpeech(request))
    
     print("Request:")
     print(json.dumps(req, indent=4))
@@ -95,8 +95,10 @@ def authorizeOrigin(header):
     print("Password: " + password)
 
     if (username is "jarvis") and (password is "jarvis"):
+        print("Credentials are correct!")
         return True
     else:
+        print("Credentials are INCORRECT!")
         return False
 
 def decodeCredentials(cred_base64):
