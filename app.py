@@ -63,7 +63,7 @@ def buildResponseSpeech(iotType, room, stateChange):
 
 def createErrorSpeech(reason):
     if (reason == "AUTH_FAILURE"):
-        return "You are not authorized to command the Broodmother."
+        return "Warning: The Broodmother received a command from an unauthorized user."
 
 def createSpeech(data):
     iotType = data.get("result").get("parameters").get("iot-type")
@@ -72,12 +72,12 @@ def createSpeech(data):
 
     speech = buildResponseSpeech(iotType, room, stateChange)
 
-    print("Response:")
-    print(speech)
-
     return speech
 
 def makeWebhookResult(speech):
+    print("Response:")
+    print(speech)
+
     return {
         "speech": speech,
         "displayText": speech,
