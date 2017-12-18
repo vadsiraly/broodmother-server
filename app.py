@@ -40,16 +40,14 @@ def webhook():
 
     print("Headers:")
     print(request.headers)
-    #authType, credentialsBase64 = request.headers['Authorization']
-    print("Credentials: ")
-    creds = request.headers['Authorization']
-    print("Type: " + creds.split()[0])    
-    print("User/Pass Base64: " + request.headers['Authorization'].split()[1])
-    print("User/Pass: " + base64.b64decode(request.headers['Authorization'].split()[1]).decode("utf-8"))
+
+    if not authorizeOrigin(request.headers['Authorization']):
+        res = makeWebhookResult(request, createErrorSpeech)
+    else:
+        res = makeWebhookResult(request, createSpeech)
+   
     print("Request:")
     print(json.dumps(req, indent=4))
-
-    res = processRequest(req)
 
     res = json.dumps(res, indent=4)
     # print(res)
@@ -57,58 +55,28 @@ def webhook():
     r.headers['Content-Type'] = 'application/json'
     return r
 
-def processRequest(req):
-    if req.get("result").get("action") != "light.action":
-        return {}
-    #baseurl = "https://query.yahooapis.com/v1/public/yql?"
-    #yql_query = makeYqlQuery(req)
-    #if yql_query is None:
-    #    return {}
-    #yql_url = baseurl + urlencode({'q': yql_query}) + "&format=json"
-    #result = urlopen(yql_url).read()
-    #data = json.loads(result)
-    res = makeWebhookResult(req)
-    return res
-
 def buildResponseSpeech(iotType, room, stateChange):
     return "I have successfully set the " + iotType + " to " + stateChange + " in the " + room + "."
 
-def makeWebhookResult(data):
+def createErrorSpeech(reason):
+    if (reason is "AUTH_FAILURE"):
+        return "You are not authorized to command the Broodmother."
+
+def createSpeech(data):
     iotType = data.get("result").get("parameters").get("iot-type")
     room = data.get("result").get("parameters").get("room")
     stateChange = data.get("result").get("parameters").get("state-change")
 
     speech = buildResponseSpeech(iotType, room, stateChange)
 
-    #query = data.get('query')
-    #if query is None:
-    #    return {}
-
-    #result = query.get('results')
-    #if result is None:
-    #    return {}
-
-    #channel = result.get('channel')
-    #if channel is None:
-    #    return {}
-
-    #item = channel.get('item')
-    #location = channel.get('location')
-    #units = channel.get('units')
-    #if (location is None) or (item is None) or (units is None):
-    #    return {}
-
-    #condition = item.get('condition')
-    #if condition is None:
-    #    return {}
-
-    # print(json.dumps(item, indent=4))
-
-    #speech = "Today the weather in " + location.get('city') + ": " + condition.get('text') + \
-    #         ", And the temperature is " + condition.get('temp') + " " + units.get('temperature')
-
     print("Response:")
     print(speech)
+
+    return speech
+
+def makeWebhookResult(data, speech):
+    if req.get("result").get("action") != "light.action":
+        return {}
 
     return {
         "speech": speech,
@@ -118,6 +86,26 @@ def makeWebhookResult(data):
         "source": "broodmother"
     }
 
+def authorizeOrigin(header):
+    auth_type = header.split()[0]
+    username, password = decodeCredentials(header.split()[1])
+
+    print("Using authorization type: " + auth_type)
+    print("Username: " + username)
+    print("Password: " + password)
+
+    if (username is "jarvis") and (password is "jarvis"):
+        return True
+    else:
+        return False
+
+def decodeCredentials(cred_base64):
+    decoded_creds = base64.b64decode(cred_base64).decode("utf-8").split()
+
+    username = decoded_creds[0]
+    password = decoded_creds[1]
+
+    return username, password
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
