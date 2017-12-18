@@ -40,8 +40,8 @@ def webhook():
 
     print("Headers:")
     print(request.headers)
-    authType, credentialsBase64 = request.headers['Authorization'].Split(" ")
-    print("Credentials: " + base64.b64decode(credentialsBase64))
+    #authType, credentialsBase64 = request.headers['Authorization']
+    print("Credentials: " + request.headers['Authorization'])
     print("Request:")
     print(json.dumps(req, indent=4))
 
