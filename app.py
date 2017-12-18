@@ -32,30 +32,13 @@ from flask import make_response
 # Flask app should start in global layout
 app = Flask(__name__)
 
-def pretty_print_POST(req):
-    """
-    At this point it is completely built and ready
-    to be fired; it is "prepared".
-
-    However pay attention at the formatting used in 
-    this function because it is programmed to be pretty 
-    printed and may differ from the actual request.
-    """
-    print('{}\n{}\n{}\n\n{}'.format(
-        '-----------START-----------',
-        req.method + ' ' + req.url,
-        '\n'.join('{}: {}'.format(k, v) for k, v in req.headers.items()),
-        req.body,
-    ))
-
 @app.route('/webhook', methods=['POST'])
 def webhook():
     req = request.get_json(silent=True, force=True)
 
-    #print("Headers:")
-    pretty_print_POST(req)
-    #print("Request:")
-    #print(json.dumps(req, indent=4))
+    print("Headers:")
+    print("Request:")
+    print(json.dumps(req, indent=4))
 
     res = processRequest(req)
 
