@@ -37,7 +37,6 @@ app = Flask(__name__)
 @app.route('/webhook', methods=['POST'])
 def webhook():
     req = request.get_json(silent=True, force=True)
-
     if req.get("result").get("action") != "light.action":
         return {}
 
