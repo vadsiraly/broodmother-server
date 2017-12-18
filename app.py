@@ -88,7 +88,7 @@ def makeWebhookResult(data, speech):
 
 def authorizeOrigin(header):
     auth_type = header.split()[0]
-    username, password = decodeCredentials(header.split(":"))
+    username, password = decodeCredentials(header.split()[1])
 
     print("Using authorization type: " + auth_type)
     print("Username: " + username)
@@ -100,7 +100,7 @@ def authorizeOrigin(header):
         return False
 
 def decodeCredentials(cred_base64):
-    decoded_creds = base64.b64decode(cred_base64).decode("utf-8").split()
+    decoded_creds = base64.b64decode(cred_base64).decode("utf-8").split(":")
 
     username = decoded_creds[0]
     password = decoded_creds[1]
