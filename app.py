@@ -31,8 +31,11 @@ from flask import Flask
 from flask import request
 from flask import make_response
 
+from flask_sslify import SSLify
+
 # Flask app should start in global layout
 app = Flask(__name__)
+sslify = SSLify(app)
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
