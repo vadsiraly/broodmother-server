@@ -80,12 +80,22 @@ def makeWebhookResult(speech):
     print("Response:")
     print(speech)
 
+    data = createGoogleData(ssml = True)
+
     return {
-        "speech": speech,
+        "speech": "<audio src='http://www.wavsource.com/snds_2017-12-04_8268401740269038/people/comedians/allen_arrogh.wav'>sound</audio>" #speech,
         "displayText": speech,
-        # "data": data,
+        "data": data,
         # "contextOut": [],
         "source": "broodmother"
+    }
+
+def createGoogleData(ssml):
+    return {
+      "google": {
+      "expect_user_response": False,
+      "is_ssml": True
+      }
     }
 
 def authorizeOrigin(header):
