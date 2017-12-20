@@ -76,13 +76,13 @@ def createCustomErrorSpeech(message):
     return message
 
 def createSpeech(data):
-    if req.get("result").get("action") == "lights.action":
+    if data.get("result").get("action") == "lights.action":
         print("Preparing response for lights.action...")
         iot_type = data.get("result").get("parameters").get("iot-type")
         room = data.get("result").get("parameters").get("room")
         stateChange = data.get("result").get("parameters").get("state-change")
         speech = answerLightAction(iot_type, room, stateChange)
-    elif req.get("result").get("action") == "mood.action":
+    elif data.get("result").get("action") == "mood.action":
         print("Preparing response for mood.action...")
         iot_type = data.get("result").get("parameters").get("iot-type")
         if iot_type != "mood":
