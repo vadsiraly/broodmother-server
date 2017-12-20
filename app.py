@@ -69,7 +69,7 @@ def answerMoodAction(mood):
     speech = "Setting the mood to " + mood + "."
     if mood == "romantic":
         speech = speech + "<audio src='http://balinttoth.com/broodmother/music/mood/romantic.mp3'></audio>"
-    return 
+    return speech
 
 def createErrorSpeech(reason):
     if (reason == "AUTH_FAILURE"):
