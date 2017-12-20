@@ -68,7 +68,7 @@ def answerLightAction(iotType, room, stateChange):
 def answerMoodAction(mood):
     speech = "Setting the mood to " + mood + "."
     if mood == "romantic":
-        speech = speech + "<audio src='http://balinttoth.com/broodmother/music/mood/romantic.mp3'></audio>"
+        speech = speech + "<audio src='https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg'>sound</audio>"#<audio src='http://balinttoth.com/broodmother/music/mood/romantic.mp3'></audio>"
     return speech
 
 def createErrorSpeech(reason):
@@ -102,17 +102,18 @@ def createSpeech(data):
 
 def makeWebhookResult(speech):
     print("Response:")
-    print(speech)
 
     data = createGoogleData(ssml = True)
 
-    return {
+    response = {
         "speech": "<speak>"+speech+"</speak>", #speech, <audio src='https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg'>sound</audio>
         "displayText": speech,
         "data": data,
         # "contextOut": [],
         "source": "broodmother"
     }
+    print(response)
+    return response
 
 def createGoogleData(ssml):
     return {
