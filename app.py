@@ -33,7 +33,7 @@ from flask import make_response
 
 from flask_sslify import SSLify
 
-accepted_actions = ["lights.action","mood.action"]
+accepted_actions = ["iot.action","mood.action"]
 
 # Flask app should start in global layout
 app = Flask(__name__)
@@ -76,8 +76,8 @@ def createCustomErrorSpeech(message):
     return message
 
 def createSpeech(data):
-    if data.get("result").get("action") == "lights.action":
-        print("Preparing response for lights.action...")
+    if data.get("result").get("action") == "iot.action":
+        print("Preparing response for iot.action...")
         iot_type = data.get("result").get("parameters").get("iot-type")
         room = data.get("result").get("parameters").get("room")
         stateChange = data.get("result").get("parameters").get("state-change")
