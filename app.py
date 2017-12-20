@@ -68,7 +68,7 @@ def answerLightAction(iotType, room, stateChange):
 def answerMoodAction(mood):
     speech = "Setting the mood to " + mood + "."
     if mood == "romantic":
-        speech = speech + "<audio src='http://k003.kiwi6.com/hotlink/ly50uywvvd/romantic.mp3'>sound</audio>"#<audio src='http://balinttoth.com/broodmother/music/mood/romantic.mp3'></audio>"
+        speech = speech + "<audio src='https://k003.kiwi6.com/hotlink/ly50uywvvd/romantic.mp3'>sound</audio>"#<audio src='http://balinttoth.com/broodmother/music/mood/romantic.mp3'></audio>"
     return speech
 
 def createErrorSpeech(reason):
