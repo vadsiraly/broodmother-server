@@ -33,6 +33,8 @@ from flask import make_response
 
 from flask_sslify import SSLify
 
+accepted_actions = ["lights.action","mood.action"]
+
 # Flask app should start in global layout
 app = Flask(__name__)
 sslify = SSLify(app)
@@ -40,7 +42,7 @@ sslify = SSLify(app)
 @app.route('/webhook', methods=['POST'])
 def webhook():
     req = request.get_json(silent=True, force=True)
-    if req.get("result").get("action") != "light.action":
+    if req.get("result").get("action") not in accepted_actions:
         return {}
 
     print("Headers:")
@@ -60,19 +62,34 @@ def webhook():
     r.headers['Content-Type'] = 'application/json'
     return r
 
-def buildResponseSpeech(iotType, room, stateChange):
+def answerLightAction(iotType, room, stateChange):
     return "I have successfully set the " + iotType + " to " + stateChange + " in the " + room + "."
+
+def answerMoodAction(mood):
+    return "Setting the mood to " + mood + "."
 
 def createErrorSpeech(reason):
     if (reason == "AUTH_FAILURE"):
         return "Warning: The Broodmother received a command from an unauthorized user."
 
-def createSpeech(data):
-    iotType = data.get("result").get("parameters").get("iot-type")
-    room = data.get("result").get("parameters").get("room")
-    stateChange = data.get("result").get("parameters").get("state-change")
+def createCustomErrorSpeech(message):
+    return message
 
-    speech = buildResponseSpeech(iotType, room, stateChange)
+def createSpeech(data):
+    if req.get("result").get("action") == "lights.action":
+        iot_type = data.get("result").get("parameters").get("iot-type")
+        room = data.get("result").get("parameters").get("room")
+        stateChange = data.get("result").get("parameters").get("state-change")
+        speech = answerLightAction(iot_type, room, stateChange)
+    else if req.get("result").get("action") == "mood.action":
+        iot_type = data.get("result").get("parameters").get("iot-type")
+        if iot_type != "mood":
+            return createCustomErrorSpeech("You cannot set the mood of the "+iot_type+". Duh!")
+        room = data.get("result").get("parameters").get("room")
+        if room != "living room":
+            return createCustomErrorSpeech("You cannot set the mood of the "+room+" yet!")
+        mood = data.get("result").get("parameters").get("mood")
+        speech = answerMoodAction(mood)
 
     return speech
 
