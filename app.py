@@ -102,7 +102,7 @@ def makeWebhookResult(speech):
     data = createGoogleData(ssml = True)
 
     return {
-        "speech": "<speak><audio src='https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg'>sound</audio></speak>", #speech,
+        "speech": "<speak>"+speech+"</speak>", #speech, <audio src='https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg'>sound</audio>
         "displayText": speech,
         "data": data,
         # "contextOut": [],
