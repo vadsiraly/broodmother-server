@@ -83,7 +83,7 @@ def makeWebhookResult(speech):
     data = createGoogleData(ssml = True)
 
     return {
-        "speech": "<audio src='http://www.wavsource.com/snds_2017-12-04_8268401740269038/people/comedians/allen_arrogh.wav'>sound</audio>", #speech,
+        "speech": "<speak><audio src='https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg'>sound</audio></speak>", #speech,
         "displayText": speech,
         "data": data,
         # "contextOut": [],
