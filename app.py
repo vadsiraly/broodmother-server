@@ -66,7 +66,10 @@ def answerLightAction(iotType, room, stateChange):
     return "I have successfully set the " + iotType + " to " + stateChange + " in the " + room + "."
 
 def answerMoodAction(mood):
-    return "Setting the mood to " + mood + "."
+    speech = "Setting the mood to " + mood + "."
+    if mood == "romantic":
+        speech = speech + "<audio src='http://balinttoth.com/broodmother/music/mood/romantic.mp3'></audio>"
+    return 
 
 def createErrorSpeech(reason):
     if (reason == "AUTH_FAILURE"):
