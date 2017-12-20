@@ -81,7 +81,7 @@ def createSpeech(data):
         room = data.get("result").get("parameters").get("room")
         stateChange = data.get("result").get("parameters").get("state-change")
         speech = answerLightAction(iot_type, room, stateChange)
-    else if req.get("result").get("action") == "mood.action":
+    elif req.get("result").get("action") == "mood.action":
         iot_type = data.get("result").get("parameters").get("iot-type")
         if iot_type != "mood":
             return createCustomErrorSpeech("You cannot set the mood of the "+iot_type+". Duh!")
@@ -90,6 +90,8 @@ def createSpeech(data):
             return createCustomErrorSpeech("You cannot set the mood of the "+room+" yet!")
         mood = data.get("result").get("parameters").get("mood")
         speech = answerMoodAction(mood)
+    else:
+        return createCustomErrorSpeech("Warning: The broodmother has received invalid action!")
 
     return speech
 
